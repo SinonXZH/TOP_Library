@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./JavaScript.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-library</title>
+</head>
+<body>
+    <aside>
+        <h1>请添加书籍信息</h1>
+        <form id="bookInformation">
+            <label>名称：<input type="text" name="name" id="name" required></label>            
+            <label>作者：<input type="text" name="author" id="author" required></label>
+            <label>页数：<input type="number" name="page" id="page" required></label>
+            <div class="checkBox">
+                <label for="">未读<input type="radio" name="readStatus" value="noRead" checked></label>
+                <label for="">已读<input type="radio" name="readStatus" value="haveRead"></label>
+            </div>
+            <label for=""><input type="submit" value="添加书籍"></label>
+        </form>
+    </aside>
+    <main>
+    </main>
+</body>
+</html>
