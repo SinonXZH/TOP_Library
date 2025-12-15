@@ -3,7 +3,8 @@ const form = document.getElementById("bookInformation");
 
 const main = document.querySelector("main");
 
-function addBookToLibrary(newBook) {
+//添加书籍让html显示
+function showBookInWeb(newBook) {
   const card = document.createElement("div");
   card.className = "card";
 
@@ -57,15 +58,51 @@ function addBookToLibrary(newBook) {
   main.appendChild(card);
 }
 
-let myLibrary = [];
+class Book{
+  constructor (name, author, page, status, dateId) {
+    this.name = name;
+    this.author = author;
+    this.page = page;
+    this.status = status;
+    this.dateId = dateId;
+  }
 
-function Book(name, author, page, status, dateId) {
-  this.name = name;
-  this.author = author;
-  this.page = page;
-  this.status = status;
-  this.dateId = dateId;
+  toggleStatus() {
+    this.status = this.status === "noRead" ? "haveRead" : "noRead";
+  }
 }
+
+class Library{
+  constructor () {
+    this.books = [];
+  }
+
+  addBook (newBook) {
+    this.books.push(newBook);
+    this.renderLibrary ();
+  }
+
+  deleteBook (bookId) {
+    this.books = this.books.filter(book => book.dateId != bookId)
+    this.renderLibrary ();
+  }
+
+  renderLibrary () {
+    document.querySelector("main").innerHTML = "";
+    this.books.forEach(book => showBookInWeb(book));
+  }
+
+  changeStatus(bookId) {
+    const book = this.books.find(b => b.dateId === bookId);
+    if (book) {
+      book.toggleStatus();
+      this.renderBooks();
+      this.renderLibrary();
+    }
+  }
+}
+
+let myLibrary = new Library;
 
 form.addEventListener("submit",e => {
   e.preventDefault();
@@ -80,27 +117,16 @@ form.addEventListener("submit",e => {
     crypto.randomUUID()
   )
 
-  myLibrary.push(newBook);
-  
-  document.querySelector("main").innerHTML = "";
-  myLibrary.forEach(book => addBookToLibrary(book));
+  myLibrary.addBook(newBook);
 })
 
 
 main.addEventListener("click", function(e){
   if(e.target.className == "delete"){
-    const bookId = e.target.dataset.id;
-    myLibrary = myLibrary.filter(book => book.dateId != bookId)
-    document.querySelector("main").innerHTML = "";
-    myLibrary.forEach(book => addBookToLibrary(book));
+    myLibrary.deleteBook(e.target.dataset.id);
   }
 
   if(e.target.className == "cardReadStatusChange"){
-    const bookId = e.target.dataset.id;
-    let book = myLibrary.find(a => a.dateId == bookId)
-    if (book.status == "noRead") book.status = "haveRead";
-    else book.status = "noRead"
-    document.querySelector("main").innerHTML = "";
-    myLibrary.forEach(book => addBookToLibrary(book));
+    myLibrary.changeStatus(e.target.dataset.id);
   }
 })
